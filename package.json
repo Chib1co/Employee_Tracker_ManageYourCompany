@@ -1,0 +1,22 @@
+{
+  "name": "employee_tracker_manageyourcompany",
+  "version": "1.0.0",
+  "description": "BCS Homework Week12",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chib1co/Employee_Tracker_ManageYourCompany.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chib1co/Employee_Tracker_ManageYourCompany/issues"
+  },
+  "homepage": "https://github.com/Chib1co/Employee_Tracker_ManageYourCompany#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
