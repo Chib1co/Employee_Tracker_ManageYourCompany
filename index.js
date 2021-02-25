@@ -131,6 +131,8 @@ const viewAllRole = () => {
 
 //Adding an employee
 const addEmployee = () => {
+    connection.query('SELECT * FROM employee', function (err, res) {
+        if (err) throw err;
     inquirer
     .prompt([
         {
@@ -155,8 +157,13 @@ const addEmployee = () => {
         },
     ])
     .then((answer) => {
-        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("answer.first");'
-    })
+        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("answer.first_name", "answer.last_name", "answer.role_id", "answer.manager_id")';
+        connection.query(query, (err, result) =>{
+            if(err)throw err;
+            console.log("new employee added")
+        })
 
-    //INSERT INTO actors (name, coolness_points, attitude) VALUES ("Jerry", 90, "relaxed");
+    })
+    })
 }
+    //INSERT INTO actors (name, coolness_points, attitude) VALUES ("Jerry", 90, "relaxed");
