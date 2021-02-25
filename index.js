@@ -56,12 +56,12 @@ const runfirstPromt = () => {
             viewAllDpt();
             break;
 
-        case "View all employees by role":
-            viewAllEmpByRole();
+        case "View all role":
+            viewAllRole();
             break;
 
         case "Add employee":
-            addEmp();
+            addEmployee();
             break;
 
         case "Add department":
@@ -117,3 +117,46 @@ const viewAllDpt = () => {
         runfirstPromt()
     } )
 };
+
+//view 
+const viewAllRole = () => {
+    connection.query('SELECT * FROM roles', (err, result) => {
+        if (err) throw err;
+        
+        console.log(`All Roles`)
+        console.table('Roles: ', res)
+        runfirstPromt()
+    } )
+};
+
+//Adding an employee
+const addEmployee = () => {
+    inquirer
+    .prompt([
+        {
+            name: 'first_name',
+            type: 'input', 
+            message: "What is the employee's fist name? ",
+        },
+        {
+            name: 'last_name',
+            type: 'input', 
+            message: "What is the employee's last name? "
+        },
+        {
+            name: 'role_id',
+            type: 'input', 
+            message: "What is the employee's role ID? "
+        },
+        {
+            name: 'manager_id',
+            type: 'input', 
+            message: "What is the employee's manager's ID? "
+        },
+    ])
+    .then((answer) => {
+        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("answer.first");'
+    })
+
+    //INSERT INTO actors (name, coolness_points, attitude) VALUES ("Jerry", 90, "relaxed");
+}
