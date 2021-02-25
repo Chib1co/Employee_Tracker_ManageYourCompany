@@ -2,21 +2,23 @@ USE companyDB;
 
 INSERT INTO department (name)
 VALUES 
-('Information Systems and Technology'),
+('IT'),
 ('Finance'),
 ('Legal'),
 ('Human Resources'),
 ('Security'),
 ('Sales');
 
+
 INSERT INTO roles (title, salary, department_id)
 VALUES
-('Web Developer', 90000, 1),
-('Accountant', 70000, 2),
-('Paralegal', 50000, 3),
-('Manager', 70000, 4),
-('Engineer', 90000, 5),
-('Sales Rep', 40000, 6);
+('Sales Lead', 70000, 6),
+('Salesperson', 50000, 6),
+('Lead Engineer', 90000, 3),
+('Software Engineer', 70000, 1),
+('Account Manager', 70000, 2),
+('Accountant', 80000, 2),
+('Legal Team Lead', 90000, 3);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
