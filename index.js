@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
   // Your port; if not 3306
   port: 3306,
   user: 'root',
-  password: 'Paas1on103',
+  password: 'Pass1on103',
   database: 'companyDB',
 });
 
@@ -21,6 +21,7 @@ connection.connect((err) => {
     console.log(`connected as id ${connection.threadId}`);
     runfirstPromt();
   })
+
 //first action function
 const runfirstPromt = () => {
     inquirer
@@ -48,11 +49,11 @@ const runfirstPromt = () => {
      // Switch case depending on user option
      switch (answer.action) {
         case "View all employees":
-            viewAllEmp();
+            viewAllEmployee();
             break;
 
-        case "View all employees by department":
-            viewAllEmpByDept();
+        case "View all department":
+            viewAllDpt();
             break;
 
         case "View all employees by role":
@@ -94,3 +95,25 @@ const runfirstPromt = () => {
 });
 
 }
+
+//view all emplyee
+const viewAllEmployee = () => {
+    connection.query('SELECT * FROM employee', (err, result) => {
+        if (err) throw err;
+        
+        console.log(`Employee list`)
+        console.table('All Employees: ', res)
+        runfirstPromt()
+    } )
+};
+
+//view department
+const viewAllDpt = () => {
+    connection.query('SELECT * FROM department', (err, result) => {
+        if (err) throw err;
+        
+        console.log(`Department list`)
+        console.table('All Department: ', res)
+        runfirstPromt()
+    } )
+};
