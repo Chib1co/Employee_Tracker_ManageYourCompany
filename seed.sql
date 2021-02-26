@@ -9,7 +9,6 @@ VALUES
 ('Security'),
 ('Sales');
 
-
 INSERT INTO roles (title, salary, department_id)
 VALUES
 ('Sales Lead', 70000, 6),
@@ -28,3 +27,4 @@ VALUES
 ('Maria', 'Hall', 4, 126),
 ('Linda', 'Martin', 5, 724),
 ('Taylor', 'Wilson', 6, 157);
+
