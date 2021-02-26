@@ -17,6 +17,7 @@ CREATE TABLE roles (
   title VARCHAR(30) NULL,
   salary DECIMAL(10,4) NULL,
   department_id INT NULL,
+  CONSTRAINT FK_department_roles FOREIGN KEY (department_id) references department (id),
   PRIMARY KEY (id)
 );
 
@@ -26,6 +27,8 @@ CREATE TABLE employee (
   last_name VARCHAR(30) NULL,
   role_id INT NULL,
   manager_id INT NULL,
+  CONSTRAINT FK_manager_employee FOREIGN KEY (manager_id) references employee(id),
+  CONSTRAINT FK_roles_employee FOREIGN KEY (role_id) references roles (id),
   PRIMARY KEY (id)
 );
 

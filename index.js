@@ -19,15 +19,17 @@ connection.connect((err) => {
       return;
     }
     console.log(`connected as id ${connection.threadId}`);
+    
     runfirstPromt();
   })
+
 
 //first action function
 const runfirstPromt = () => {
     inquirer
     .prompt({
         name:'action',
-        type: 'rawlist',
+        type: 'list',
         message: 'What would you like to do?',
         choices: [
             "View all employees",
@@ -98,11 +100,17 @@ const runfirstPromt = () => {
 
 //view all emplyee
 const viewAllEmployee = () => {
-    connection.query('SELECT * FROM employee', (err, result) => {
+    connection.query(`SELECT employee.first_name, employee.last_name, roles.title, dept.name FROM companyDB.employee as employee
+    JOIN companyDB.roles as roles
+    on employee.role_id = roles.id
+    JOIN companyDB.department as dept
+    on roles.department_id = dept.id
+    ;`
+    , (err, res) => {
         if (err) throw err;
         
         console.log(`Employee list`)
-        console.table('All Employees: ', res)
+        console.table(res)
         runfirstPromt()
     } )
 };
@@ -146,9 +154,18 @@ const addEmployee = () => {
             message: "What is the employee's last name? "
         },
         {
-            name: 'role_id',
-            type: 'input', 
-            message: "What is the employee's role ID? "
+            name: 'role',
+            type: 'rawlist',
+            message: "What is the employee's role? ",
+            choices: [
+                "Sales Lead",
+                "Salesperson",
+                "Lead Engineert",
+                "Software Engineer",
+                "Account Manager",
+                "Accountant",
+                "Legal Team Lead",
+            ]
         },
         {
             name: 'manager_id',
@@ -157,11 +174,13 @@ const addEmployee = () => {
         },
     ])
     .then((answer) => {
-        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("answer.first_name", "answer.last_name", "answer.role_id", "answer.manager_id")';
+        if(answer.role === role.title){
+        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("answer.first_name", "answer.last_name", "answer.role", "answer.manager_id")';
         connection.query(query, (err, result) =>{
             if(err)throw err;
             console.log("new employee added")
         })
+        }
 
     })
     })
