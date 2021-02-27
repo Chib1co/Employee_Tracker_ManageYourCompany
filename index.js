@@ -33,8 +33,8 @@ const runfirstPromt = () => {
         message: 'What would you like to do?',
         choices: [
             "View all employees",
-            "View all employees by role",
-            "View all employees by department",
+            "View all role",
+            "View all department",
             "View all employees by manager",
             "Add employee",
             "Add role",
@@ -53,21 +53,17 @@ const runfirstPromt = () => {
         case "View all employees":
             viewAllEmployee();
             break;
-
-        case "View all department":
-            viewAllDpt();
-            break;
-
         case "View all role":
             viewAllRole();
             break;
-
+        case "View all department":
+            viewAllDpt();
+            break;
         case "Add employee":
             addEmployee();
             break;
-
         case "Add department":
-            addDept();
+            // viewAllDpt();
             break;
         case "Add role":
             addRole();
@@ -115,28 +111,27 @@ const viewAllEmployee = () => {
     } )
 };
 
-//view department
-const viewAllDpt = () => {
-    connection.query('SELECT * FROM department', (err, result) => {
-        if (err) throw err;
-        
-        console.log(`Department list`)
-        console.table('All Department: ', res)
-        runfirstPromt()
-    } )
-};
 
 //view 
 const viewAllRole = () => {
-    connection.query('SELECT * FROM roles', (err, result) => {
+    connection.query('SELECT * FROM roles', (err, res) => {
         if (err) throw err;
         
-        console.log(`All Roles`)
-        console.table('Roles: ', res)
+        console.log(`Role list`)
+        console.table(res)
         runfirstPromt()
-    } )
-};
-
+    } );
+}
+//view department
+const viewAllDpt = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        
+        console.log(`Department list`)
+        console.table(res)
+        runfirstPromt()
+    } );
+}
 //Adding an employee
 const addEmployee = () => {
     connection.query('SELECT * FROM employee', function (err, res) {
@@ -175,8 +170,9 @@ const addEmployee = () => {
     ])
     .then((answer) => {
         if(answer.role === role.title){
-        const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("answer.first_name", "answer.last_name", "answer.role", "answer.manager_id")';
-        connection.query(query, (err, result) =>{
+            connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) 
+            VALUES ("answer.first_name", "answer.last_name", "answer.role", "answer.manager_id")`,
+             function(err, result){
             if(err)throw err;
             console.log("new employee added")
         })
@@ -185,4 +181,3 @@ const addEmployee = () => {
     })
     })
 }
-    //INSERT INTO actors (name, coolness_points, attitude) VALUES ("Jerry", 90, "relaxed");
