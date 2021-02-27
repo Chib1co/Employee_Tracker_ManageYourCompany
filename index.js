@@ -35,7 +35,6 @@ const runfirstPromt = () => {
             "View all employees",
             "View all role",
             "View all department",
-            "View all employees by manager",
             "Add employee",
             "Add role",
             "Add department",
@@ -134,7 +133,7 @@ const viewAllDpt = () => {
 }
 //Adding an employee
 const addEmployee = () => {
-    connection.query('SELECT * FROM employee', function (err, res) {
+    connection.query('SELECT * FROM roles', function (err, res) {
         if (err) throw err;
     inquirer
     .prompt([
@@ -152,15 +151,12 @@ const addEmployee = () => {
             name: 'role',
             type: 'list',
             message: "What is the employee's role? ",
-            choices: [
-                "Sales Lead",
-                "Salesperson",
-                "Lead Engineert",
-                "Software Engineer",
-                "Account Manager",
-                "Accountant",
-                "Legal Team Lead",
-            ]
+            choices: function(){
+                var roleSelect = [];
+                for(let i = 0; i < res.length; i++){
+                    roleSelect.push(res[i].title);
+                } return roleSelect;
+            }
         },
         {
             name: 'manager_id',
@@ -169,15 +165,20 @@ const addEmployee = () => {
         },
     ])
     .then((answer) => {
-        if(answer.role === role.title){
-            connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) 
-            VALUES ("answer.first_name", "answer.last_name", "answer.role", "answer.manager_id")`,
-             function(err, result){
-            if(err)throw err;
-            console.log("new employee added")
-        })
+        let role_id;
+        for(let x = 0; x < res.length; x++){
+        if(res[x].title === answer.role){
+            role_id = res[x].id;
         }
-
-    })
-    })
+    }
+            connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) 
+            VALUES ("answer.first_name", "answer.last_name", "role_id", "answer.manager_id"`),
+               (err, res) => {
+                if (err) throw err;
+            console.log("new employee added");
+            console.table(res)
+             }
+        })
+ })
 }
+
