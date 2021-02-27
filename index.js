@@ -150,7 +150,7 @@ const addEmployee = () => {
         },
         {
             name: 'role',
-            type: 'rawlist',
+            type: 'list',
             message: "What is the employee's role? ",
             choices: [
                 "Sales Lead",
