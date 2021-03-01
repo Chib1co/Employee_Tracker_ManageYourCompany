@@ -36,14 +36,15 @@ const runfirstPromt = () => {
             "View all role",
             "View all department",
             "Add employee",
-            "Add role",
             "Add department",
+            "Add role",
             "Update employee role",
             "Update employee manager",
             "Delete employee",
             "Delete role",
             "Delete department",
-            "View department budgets"
+            "View department budgets",
+            "EXIT"
         ]
     })
 .then((answer) => {
@@ -62,7 +63,7 @@ const runfirstPromt = () => {
             addEmployee();
             break;
         case "Add department":
-            // viewAllDpt();
+             addDpt();
             break;
         case "Add role":
             addRole();
@@ -88,6 +89,9 @@ const runfirstPromt = () => {
         case "Delete department":
             deleteDept();
             break;
+        case "EXIT":
+            finishEdit();
+            break
     }
 });
 
@@ -171,14 +175,109 @@ const addEmployee = () => {
             role_id = res[x].id;
         }
     }
-            connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) 
-            VALUES ("answer.first_name", "answer.last_name", "role_id", "answer.manager_id"`),
-               (err, res) => {
+            connection.query ('INSERT INTO employee SET ?',
+            {   first_name: answer.first_name,
+                last_name: answer.last_name,
+                manager_id: answer.manager_id,
+                role_id: role_id,
+            },function(err){
                 if (err) throw err;
             console.log("new employee added");
-            console.table(res)
-             }
-        })
+            connection.query('SELECT * FROM employee', (err, res) => {
+                if (err) throw err;
+                
+                console.log(`Employee list`)
+                console.table(res)
+                 runfirstPromt()
+             })      
  })
+})
+})
 }
 
+
+const addDpt = () => {
+   
+    inquirer
+    .prompt([
+        {
+            name: 'newDepartment',
+            type: 'input', 
+            message: "What is the department name to add? ",
+        }
+    ]).then((answer) => {
+        connection.query('INSERT INTO department SET ?',
+        {
+            name: answer.newDepartment
+        })
+        connection.query('SELECT * FROM department', function (err, res) {
+            if (err) throw err;
+            console.log(`New Department added`)
+                console.table(res)
+                 runfirstPromt()
+    })
+})
+}
+
+const addRole = () => {
+   
+    inquirer
+    .prompt([
+        {
+            name: 'newRole',
+            type: 'input', 
+            message: "What is the role title to add? ",
+        }
+    ]).then((answer) => {
+        connection.query('INSERT INTO roles SET ?',
+        {
+            title: answer.newRole
+        })
+        connection.query('SELECT * FROM roles', function (err, res) {
+            if (err) throw err;
+            console.log(`New role added`)
+                console.table(res)
+                 runfirstPromt()
+    })
+})
+}
+
+const updateEmpRole = () => {
+   connect.query('SELECT * FROM employee')
+    inquirer
+    .prompt([
+        {
+            name: 'selectupdateRole',
+            type: 'list', 
+            message: "which employee's role would you like to update? ",
+            choices: function(){
+                var roleList= [];
+                for(let i = 0; i < res.length; i++){
+                    roleList.push(res[i].title);
+                } return roleList;
+            }
+        }
+    ]).then((answer) => {
+        inquirer
+        .prompt([
+            {
+                name: 'updateRole',
+                type:'input',
+                message: 'what would you like update to?'
+            }
+        ])   
+        connection.query('update roles SET ?',
+        {
+            title: answer.updateRole
+        })
+        connection.query('SELECT * FROM roles', function (err, res) {
+            if (err) throw err;
+            console.log(`roles updated`)
+                console.table(res)
+                 runfirstPromt()
+    })
+})
+}
+function finishEdit(){
+    connection.end();
+};
