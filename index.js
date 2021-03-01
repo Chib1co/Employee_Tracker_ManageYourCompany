@@ -243,7 +243,8 @@ const addRole = () => {
 }
 
 const updateEmpRole = () => {
-   connect.query('SELECT * FROM employee')
+    connection.query('SELECT * FROM employee', function (err, res) {
+    if (err) throw err;
     inquirer
     .prompt([
         {
@@ -251,25 +252,38 @@ const updateEmpRole = () => {
             type: 'list', 
             message: "which employee's role would you like to update? ",
             choices: function(){
-                var roleList= [];
+                var empList= [];
                 for(let i = 0; i < res.length; i++){
-                    roleList.push(res[i].title);
-                } return roleList;
+                    empList.push(res[i].title);
+                } return empList;
             }
         }
     ]).then((answer) => {
+        connection.query('SELECT * FROM roles ', function (err, res) {
+            if (err) throw err;
         inquirer
         .prompt([
             {
                 name: 'updateRole',
-                type:'input',
-                message: 'what would you like update to?'
+                type:'list',
+                message: 'what would you like update to?',
+                choices: function(){
+                    var roleList= [];
+                    for(let i = 0; i < res.length; i++){
+                        roleList.push(res[i].title);
+                    } return roleList;
+                }
             }
-        ])   
-        connection.query('update roles SET ?',
+            
+        ])
+        .then((roleAnswer) => { 
+            var updateEmp = answer.selectupdateRole
+            var updateRole = roleAnswer.updateRole
+        connection.query('update employee SET ? WHERE ?', function (err, res) {
+            if (err) throw err;
         {
-            title: answer.updateRole
-        })
+            role_id: roleAnswer.updateRole
+        }
         connection.query('SELECT * FROM roles', function (err, res) {
             if (err) throw err;
             console.log(`roles updated`)
@@ -277,7 +291,46 @@ const updateEmpRole = () => {
                  runfirstPromt()
     })
 })
+        })
+})
+   })
+})
 }
+
+const deleteEmp = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+    inquirer
+    .prompt([
+        {
+            name: 'deleteEmp',
+            type:'list',
+            message: 'Which employee would you like to delete from the list?',
+            choices: function(){
+                var empList= [];
+                for(let i = 0; i < res.length; i++){
+                    empList.push(res[i].title);
+                } return empList;
+            }
+        }
+        
+    ]).then((answer) => {
+        console.log(answer.deleteEmp.first_name)
+    connection.query(
+      'DELETE FROM employee WHERE ?',
+      {
+       first_name: answer.deleteEmp.first_name,
+      },
+      (err, res) => {
+        if (err) throw err;
+        console.log(`${res.first_name}${res.last_name} deleted!\n`);
+        runfirstPromt()
+      }
+    );
+});
+    })
+  };
+   
 function finishEdit(){
     connection.end();
 };
