@@ -242,47 +242,46 @@ const addRole = () => {
 const updateEmpRole = () => {
     connection.query('SELECT * FROM employee', function (err, res) {
         if (err) throw err;
+        const employee = res;
+        // console.log(res)
         inquirer
             .prompt([
                 {
-                    name: 'selectupdateRole',
+                    name: 'selectEmp',
                     type: 'list',
-                    message: "which employee's role would you like to update? ",
+                    message: "which employee's would you like to update? ",
                     choices: function () {
                         var empList = [];
-                        for (let i = 0; i < res.length; i++) {
-                            empList.push(res[i].first_name + res[i].last_name);
+                        for (let i = 0; i < employee.length; i++) {
+                            empList.push({name: employee[i].first_name + employee[i].last_name, value: employee[i].id});
                         } return empList;
                     }
                 }
             ]).then((answer) => {
-                console.log(answer.selectupdateRole);
+                console.log(answer.selectEmp)
                 connection.query('SELECT * FROM roles ', function (err, res) {
                     if (err) throw err;
+                    const role = res
                     inquirer
                         .prompt([
                             {
                                 name: 'updateRole',
                                 type: 'list',
-                                message: 'what would you like update to?',
+                                message: 'What is new role for the employee ?',
                                 choices: function () {
                                     var roleList = [];
-                                    for (let i = 0; i < res.length; i++) {
-                                        roleList.push(res[i].title);
+                                    for (let i = 0; i < role.length; i++) {
+                                        roleList.push({name: role[i].title, value: role[i].id});
                                     } return roleList;
                                 }
                             }
 
                         ])
                         .then((roleAnswer) => {
-                            var updateEmp = answer.selectupdateRole
-                            var updateRole = roleAnswer.updateRole
-                            connection.query('update employee SET ? WHERE ?', function (err, res) {
+                            connection.query('update employee SET role_id = ? WHERE id = ?', [roleAnswer.updateRole, answer.selectEmp], function (err, res) {
                                 if (err) throw err;
-                                {
-                                    role_id: roleAnswer.updateRole
-                                }
-                                connection.query('SELECT * FROM roles', function (err, res) {
+                            
+                             connection.query('SELECT * FROM employee', function (err, res) {
                                     if (err) throw err;
                                     console.log(`roles updated`)
                                     console.table(res)
@@ -313,13 +312,15 @@ const deleteEmp = () => {
                 }
 
             ]).then((answer) => {
+                console.log(answer)
                 connection.query(
-                    'DELETE FROM employee WHERE ?',
+                    'DELETE FROM employee SET ? WHERE ?',
+                    {deleteEmp:answer},
                     {
-                        first_name: answer.first_name,
-                        last_name: answer.last_name,
-                        role_id: answer.role_id,
-                        manager_id: answer.manager_id,
+                        first_name: answer.deleteEmp.first_name,
+                        last_name: answer.deleteEmp.last_name,
+                        role_id: answer.deleteEmp.role_id,
+                        manager_id: answer.deleteEmp.manager_id,
                     }, function (err) {
                         if (err) throw err;
                         console.log("selected employee deleted");
