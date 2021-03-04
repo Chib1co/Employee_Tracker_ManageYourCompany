@@ -474,7 +474,7 @@ const updateEmpManag = () => {
             }
             }
         ]).then((managerAnswer) => {
-            connection.query('update employee SET manager_id = ? WHERE id = ?', [managerAnswer.newManage, answer.updateEmpManag], function(err, res){
+            connection.query('update employee SET manager_id = ? WHERE id = ?', [managerAnswer.newManager, answer.updateEmpManag], function(err, res){
                 if(err) throw err;
             })
             connection.query('SELECT * FROM employee', function (err, res){
