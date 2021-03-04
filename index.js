@@ -42,6 +42,8 @@ const runfirstPromt = () => {
                 "Delete employee",
                 "Delete role",
                 "Delete department",
+                "View employee by Manager",
+                "Update employee managers",
                 "EXIT"
             ]
         })
@@ -83,6 +85,12 @@ const runfirstPromt = () => {
                     break;
                 case "Delete department":
                     deleteDept();
+                    break;
+                case "View employee by Manager":
+                    viewByManager();
+                    break;
+                case "Update employee managers":
+                    updateEmpManag();
                     break;
                 case "EXIT":
                     finishEdit();
@@ -404,8 +412,85 @@ const deleteDept = () => {
 };
 
 const viewByManager = () => {
-    connection.query('SELECT * FROM  ')
+    connection.query('SELECT * FROM employee', function (err, res) {
+        if (err) throw err;
+    inquirer
+    .prompt([
+        {
+            name: 'viewbyManag',
+            type: 'list',
+            message: 'Select manager name to show the team member',
+            choices: function() {
+                var viewManager = [];
+                for(let i = 0; i< res.length; i++){
+                    viewManager.push({ name: res[i].first_name + res[i].last_name, value: res[i].id });
+                } return viewManager
+            }
+
+        }
+    ]).then((answer) => {
+        connection.query('SELECT * FROM employee WHERE manager_id =?', [answer.viewbyManag], function(err, res){
+            if (err) throw err;
+            console.log(`Employee with manager ${answer.viewbyManag.name}`)
+                        console.table(res)
+                        runfirstPromt()
+        })
+
+    })
+    
+})
 }
+const updateEmpManag = () => {
+    connection.query('SELECT * FROM employee', function(err, res){
+        if(err) throw err;
+    inquirer
+      .prompt([
+          {
+              name: 'updateEmpManag',
+              type: 'list',
+              message: 'Select employee name who has new manager',
+              choices: function(){
+                  var updateEmpMng = []
+                  for(let i = 0; i < res.length; i++){
+                      updateEmpMng.push({name: res[i].first_name + res[i].last_name, value: res[i].id});
+                  } return updateEmpMng
+              }
+
+          }
+      ]).then((answer) => {
+          connection.query('SELECT * FROM employee', function(err, res){
+              if(err) throw err;
+        inquirer
+        .prompt([
+            {
+                name: 'newManager',
+                type: 'list',
+                message: 'Select new managers name',
+                choices: function(){
+                    var newManager = []
+                    for(let i = 0; i < res.length; i++){
+                        newManager.push({name: res[i].first_name + res[i].last_name, value: res[i].id});
+                    } return newManager       
+            }
+            }
+        ]).then((managerAnswer) => {
+            connection.query('update employee SET manager_id = ? WHERE id = ?', [managerAnswer.newManage, answer.updateEmpManag], function(err, res){
+                if(err) throw err;
+            })
+            connection.query('SELECT * FROM employee', function (err, res){
+                if(err) throw err;
+                console.log('updated employees new manager');
+                console.table(res)
+                runfirstPromt()
+            })
+
+        })
+    
+      })
+    })
+})
+}
+
 function finishEdit() {
     connection.end();
 };
