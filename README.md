@@ -29,6 +29,7 @@ When the person start running the index.hs, it askes questions. Then, we can vie
 ![Show DB tables](image/showTable.png "showing db table")
 
 * Demo movie of the functions
+
 ![Demo movie](image/sampleGif.gif "Demo movie how to run")
 
 
