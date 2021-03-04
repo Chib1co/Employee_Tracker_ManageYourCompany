@@ -253,7 +253,7 @@ const updateEmpRole = () => {
                     choices: function () {
                         var empList = [];
                         for (let i = 0; i < employee.length; i++) {
-                            empList.push({name: employee[i].first_name + employee[i].last_name, value: employee[i].id});
+                            empList.push({ name: employee[i].first_name + employee[i].last_name, value: employee[i].id });
                         } return empList;
                     }
                 }
@@ -271,7 +271,7 @@ const updateEmpRole = () => {
                                 choices: function () {
                                     var roleList = [];
                                     for (let i = 0; i < role.length; i++) {
-                                        roleList.push({name: role[i].title, value: role[i].id});
+                                        roleList.push({ name: role[i].title, value: role[i].id });
                                     } return roleList;
                                 }
                             }
@@ -280,8 +280,8 @@ const updateEmpRole = () => {
                         .then((roleAnswer) => {
                             connection.query('update employee SET role_id = ? WHERE id = ?', [roleAnswer.updateRole, answer.selectEmp], function (err, res) {
                                 if (err) throw err;
-                            
-                             connection.query('SELECT * FROM employee', function (err, res) {
+
+                                connection.query('SELECT * FROM employee', function (err, res) {
                                     if (err) throw err;
                                     console.log(`roles updated`)
                                     console.table(res)
@@ -306,36 +306,106 @@ const deleteEmp = () => {
                     choices: function () {
                         var deleteempList = [];
                         for (let i = 0; i < res.length; i++) {
-                            deleteempList.push(res[i].first_name + res[i].last_name);
+                            // roleList.push({name: role[i].title, value: role[i].id});
+                            deleteempList.push({ name: res[i].first_name + res[i].last_name, value: res[i].id });
                         } return deleteempList;
                     }
                 }
 
             ]).then((answer) => {
                 console.log(answer)
-                connection.query(
-                    'DELETE FROM employee SET ? WHERE ?',
-                    {deleteEmp:answer},
-                    {
-                        first_name: answer.deleteEmp.first_name,
-                        last_name: answer.deleteEmp.last_name,
-                        role_id: answer.deleteEmp.role_id,
-                        manager_id: answer.deleteEmp.manager_id,
-                    }, function (err) {
+                connection.query('DELETE FROM employee WHERE id = ?', [answer.deleteEmp], function (err, res) {
+                    if (err) throw err;
+                    console.log("selected employee deleted");
+                    connection.query('SELECT * FROM employee', (err, res) => {
                         if (err) throw err;
-                        console.log("selected employee deleted");
-                        connection.query('SELECT * FROM employee', (err, res) => {
-                            if (err) throw err;
 
-                            console.log(`New employee list`)
-                            console.table(res)
-                            runfirstPromt()
-                        })
+                        console.log(`New employee list`)
+                        console.table(res)
+                        runfirstPromt()
                     })
+                })
+
             })
     })
 };
 
+
+const deleteRole = () => {
+    connection.query('SELECT * FROM roles', (err, res) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: 'deleteRole',
+                    type: 'list',
+                    message: 'Which role would you like to delete from the list?',
+                    choices: function () {
+                        var deleteRoleList = [];
+                        for (let i = 0; i < res.length; i++) {
+                            // roleList.push({name: role[i].title, value: role[i].id});
+                            deleteRoleList.push({ name: res[i].title, value: res[i].id });
+                        } return deleteRoleList;
+                    }
+                }
+
+            ]).then((answer) => {
+                console.log(answer)
+                connection.query('DELETE FROM roles WHERE id = ?', [answer.deleteRole], function (err, res) {
+                    if (err) throw err;
+                    console.log("selected role deleted");
+                    connection.query('SELECT * FROM roles', (err, res) => {
+                        if (err) throw err;
+
+                        console.log(`New role list`)
+                        console.table(res)
+                        runfirstPromt()
+                    })
+                })
+
+            })
+    })
+};
+
+
+const deleteDept = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: 'deleteDept',
+                    type: 'list',
+                    message: 'Which department would you like to delete from the list?',
+                    choices: function () {
+                        var deleteDeptList = [];
+                        for (let i = 0; i < res.length; i++) {
+                           deleteDeptList.push({ name: res[i].name, value: res[i].id });
+                        } returndeleteDeptList;
+                    }
+                }
+
+            ]).then((answer) => {
+                console.log(answer)
+                connection.query('DELETE FROM department WHERE id = ?', [answer.deleteDept], function (err, res) {
+                    if (err) throw err;
+                    console.log("selected department deleted");
+                    connection.query('SELECT * FROM roles', (err, res) => {
+                        if (err) throw err;
+
+                        console.log(`New dept list`)
+                        console.table(res)
+                        runfirstPromt()
+                    })
+                })
+
+            })
+    })
+};
+
+const viewByManager = () => {
+    connection.query('SELECT * FROM  ')
+}
 function finishEdit() {
     connection.end();
 };
