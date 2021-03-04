@@ -10,6 +10,7 @@
     </li>
       <li><a href="#built-with">Built With</a></li>
     <li><a href="#license">License</a></li>
+    <li><a href="#Learning">Learning</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -21,8 +22,15 @@
 Node.js to create employee tacker for a company management. Using mysql, inquirer to build the functions.
 When the person start running the index.hs, it askes questions. Then, we can view all employees, all roles, and all departments the company has. Also, we can add employees, roles, and department. Finally, we can update the employee's role as well.
 
-* [Express]<img src="image/initialpage.png" alt="initial page"/>
-* [Heroku]<img src="image/note.png" alt="note page"/>
+* First inquirer prompt when you run node index.js
+![First Inquirer Prompt](image/firstPrompt.png "first run")
+
+* showing database tables 
+![Show DB tables](image/showTable.png "showing db table")
+
+* Demo movie of the functions
+![Demo movie](image/sampleGif.gif "Demo movie how to run")
+
 
 
 ## Built With
@@ -35,9 +43,9 @@ Major framework I used to create this application.
 
 
 
-## What I learn from the assignment
+## Learning
 
-Just basic syntax of how to build backend function using node express. This assingment was pretty straight forward. Good to get a practice of using express.
+Using mysql and organizing the database by using node.js. I struggled for making update function, from what data I can get from the answer and what I can pass it to. Ended up those bonus functions helped me to understand it deeper. 
 
 <!-- LICENSE -->
 ## License
