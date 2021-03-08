@@ -1,4 +1,4 @@
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pass1on103';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'myPassword';
 DROP DATABASE IF EXISTS companyDB;
 CREATE database companyDB;
 

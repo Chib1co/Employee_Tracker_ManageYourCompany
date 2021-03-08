@@ -1,5 +1,3 @@
-USE companyDB;
-
 INSERT INTO department (name)
 VALUES 
 ('IT'),
@@ -21,10 +19,10 @@ VALUES
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-('John', 'Smith', 1, 458),
-('Ronald', 'Young', 2, 276),
-('David', 'Miller', 3, 486),
-('Maria', 'Hall', 4, 126),
-('Linda', 'Martin', 5, 724),
-('Taylor', 'Wilson', 6, 157);
+('John', 'Smith', 8, null),
+('Ronald', 'Young', 8, null),
+('David', 'Miller', 9, null),
+('Maria', 'Hall', 10, null),
+('Linda', 'Martin', 11, null),
+('Taylor', 'Wilson', 12, null);
 
